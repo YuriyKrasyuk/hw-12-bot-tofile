@@ -42,10 +42,14 @@ class Birthday(Field):
 
     @ value.setter
     def value(self, value):
-        try:
-            self.__value = datetime.strptime(value, '%d-%m-%Y')
-        except:
-            Exception(f'Please enter birth date in format: DD-MM-YYYY')
+        if value is None:
+            self.__value = None
+        else:
+            try:
+                self.__value = datetime.strptime(value, '%d-%m-%Y')
+            except:
+                raise Exception(
+                    f'Please enter birth date in format: DD-MM-YYYY')
 
 
 class Record:
@@ -232,7 +236,7 @@ def main():
         user_input = input('Enter command and info: ')
         command_info = user_input.lower()
         for key in COMMANDS:
-            if command_info.find(key) == 0 and command_info[len(key):len(key)+1].isalnum() == False:
+            if command_info.find(key) == 0 and not command_info[len(key):len(key)+1].isalnum():
                 command = key
                 contact_info = user_input[len(key):].split()
                 COMMANDS[command](contact_info)
